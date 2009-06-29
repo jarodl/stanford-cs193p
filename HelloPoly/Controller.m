@@ -12,7 +12,10 @@
 }
 
 - (void)awakeFromNib {
-	poly = [[PolygonShape alloc] initWithNumberOfSides:numberOfSidesLabel.text.integerValue minimumNumberOfSides:3 maximumNumberOfSides:12];
+	int defaultNumOfSides = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfSides"];
+	if (defaultNumOfSides == 0) defaultNumOfSides = 5;
+	poly = [[PolygonShape alloc] initWithNumberOfSides:defaultNumOfSides minimumNumberOfSides:3 maximumNumberOfSides:12];
+	[self updateInterface];
 }
 
 - (void)updateInterface {
@@ -22,7 +25,8 @@
 	polyView.poly = poly;
 	[polyView setNeedsDisplay];
 	// save to user defaults
-	[[NSUserDefaults standardUserDefaults] setObject:numberOfSidesLabel.text forKey:@"numberOfSides"];
+	NSLog(@"Saving %i to defaults", numberOfSidesLabel.text.integerValue);
+	[[NSUserDefaults standardUserDefaults] setInteger:numberOfSidesLabel.text.integerValue forKey:@"numberOfSides"];
 }
 
 @end
